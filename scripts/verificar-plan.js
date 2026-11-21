@@ -69,6 +69,7 @@ assert.equal(
   1189,
   'el índice debe cubrir los 1189 capítulos',
 )
+let formulasRepetidas = 0
 for (const libro of LIBROS) {
   TEMAS[libro.id].forEach((entrada, indice) => {
     const referencia = `${libro.id} ${indice + 1}`
@@ -83,8 +84,13 @@ for (const libro of LIBROS) {
       palabras(clausulas[2]) >= 25,
       `${referencia}: la aplicación debe tener al menos 25 palabras`,
     )
+    assert.ok(!clausulas[1].includes(';') && !clausulas[2].includes(';'), `${referencia}: sin puntos y coma encadenados`)
+    if (clausulas[2].includes('por el Espíritu Santo en comunión con el Padre y el Hijo')) {
+      formulasRepetidas += 1
+    }
   })
 }
+assert.ok(formulasRepetidas < 60, 'la aplicación no debe repetir una fórmula trinitaria fija')
 
 const lecturasIniciales = generarPlan(365)[0].lecturas
 const nuevo = crearExtras(lecturasIniciales)
@@ -97,6 +103,7 @@ assert.match(nota, /1\) Observación/, 'la nota debe incluir el punto 1')
 assert.match(nota, /2\) Interpretación/, 'la nota debe incluir el punto 2')
 assert.match(nota, /3\) Aplicación cristocéntrica/, 'la nota debe incluir el punto 3')
 assert.match(nota, /Génesis 1: Dios crea el cielo/, 'la observación debe ser del capítulo leído')
+assert.doesNotMatch(nota, /[?!]\./, 'no debe duplicar signos de interrogación o exclamación')
 assert.match(nota, /Fuentes Reformadas Presbiterianas — /, 'la nota debe indicar las fuentes del día')
 for (const obra of bibliografiaPara(lecturasIniciales)) {
   assert.ok(nota.includes(obra.replace(/\.$/, '')), `falta la fuente ${obra} en la nota`)

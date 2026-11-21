@@ -6,7 +6,7 @@ import { generarNotaExegetica } from './exegetica.js'
 
 // Cambia cuando se reescriba el contenido generado: permite regenerar solo
 // las notas antiguas de la app sin borrar lo que el estudiante haya editado.
-export const VERSION_NOTA = 4
+export const VERSION_NOTA = 5
 
 function prepararEntrada(entrada) {
   if (Array.isArray(entrada)) {

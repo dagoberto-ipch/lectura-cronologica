@@ -102,7 +102,8 @@ function familiaDe(libroId) {
 }
 
 function frase(texto) {
-  return `${texto.replace(/[.\s]+$/, '')}.`
+  const limpio = texto.replace(/[.\s]+$/, '')
+  return /[?!]$/.test(limpio) ? limpio : `${limpio}.`
 }
 
 function puntosDelCapitulo(libroId, capitulo) {
