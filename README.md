@@ -2,6 +2,8 @@
 
 Lectura cronológica completa de la Biblia en planes de 1 y 2 años, con seguimiento personal y material de estudio por día.
 
+Documentación: [descripción, objetivo, modo de uso y ventajas de las modalidades](DOCUMENTACION.md).
+
 ## Características
 
 - 66 libros y 1189 capítulos en orden cronológico, sin omisiones ni repeticiones.
