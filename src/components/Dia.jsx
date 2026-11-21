@@ -1,3 +1,5 @@
+import { useLayoutEffect, useRef } from 'react'
+
 import { VERSION_NOTA } from '../data/extras.js'
 import { bibliografiaPara } from '../data/exegetica.js'
 import { formatearSinAnio } from '../lib/fechas.js'
@@ -20,6 +22,33 @@ const SECCIONES_PREGUNTAS = [
     agregar: '+ Agregar pregunta de aplicación',
   },
 ]
+
+function AreaAuto({ id, className, filas = 2, valor, etiqueta, placeholder, onChange }) {
+  const referencia = useRef(null)
+
+  useLayoutEffect(() => {
+    const area = referencia.current
+    if (!area) return
+    area.style.height = 'auto'
+    const estilo = getComputedStyle(area)
+    const bordes =
+      parseFloat(estilo.borderTopWidth) + parseFloat(estilo.borderBottomWidth)
+    area.style.height = `${area.scrollHeight + bordes}px`
+  }, [valor])
+
+  return (
+    <textarea
+      ref={referencia}
+      id={id}
+      className={className}
+      rows={filas}
+      aria-label={etiqueta}
+      placeholder={placeholder}
+      value={valor}
+      onChange={(evento) => onChange(evento.target.value)}
+    />
+  )
+}
 
 export default function Dia({
   dia,
@@ -205,14 +234,15 @@ export default function Dia({
 
             {extras[seccion.campo].map((pregunta, indice) => (
               <div className="pregunta-card" key={indice}>
-                <div className="fila-multiple">
-                  <input
-                    type="text"
-                    aria-label={`${seccion.etiqueta} ${indice + 1}`}
+                <div className="fila-multiple pregunta-fila">
+                  <AreaAuto
+                    className="pregunta-texto"
+                    filas={2}
+                    etiqueta={`${seccion.etiqueta} ${indice + 1}`}
                     placeholder="Escribe la pregunta…"
-                    value={pregunta.texto}
-                    onChange={(evento) =>
-                      cambiarPregunta(seccion.campo, indice, 'texto', evento.target.value)
+                    valor={pregunta.texto}
+                    onChange={(valor) =>
+                      cambiarPregunta(seccion.campo, indice, 'texto', valor)
                     }
                   />
                   <button
@@ -227,13 +257,14 @@ export default function Dia({
                 <label className="respuesta-label" htmlFor={`respuesta-${seccion.campo}-${indice}`}>
                   Tu respuesta
                 </label>
-                <textarea
+                <AreaAuto
                   id={`respuesta-${seccion.campo}-${indice}`}
-                  rows={3}
+                  className="respuesta-texto"
+                  filas={3}
                   placeholder="Escribe aquí tu respuesta; queda guardada para tu seguimiento…"
-                  value={pregunta.respuesta}
-                  onChange={(evento) =>
-                    cambiarPregunta(seccion.campo, indice, 'respuesta', evento.target.value)
+                  valor={pregunta.respuesta}
+                  onChange={(valor) =>
+                    cambiarPregunta(seccion.campo, indice, 'respuesta', valor)
                   }
                 />
               </div>
